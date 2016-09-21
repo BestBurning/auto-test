@@ -1,7 +1,8 @@
-package com.us.pages;
+package com.us.pages.mytest;
 
 import com.us.util.PropertyLoader;
 import org.apache.commons.lang3.StringUtils;
+import org.testng.annotations.Test;
 
 import java.io.File;
 
@@ -9,11 +10,10 @@ import java.io.File;
  * @author Bruce
  * @date 16/9/18
  */
-public class Main {
+public class Main{
     private static String defaultFilePath = "/file.jpg";
 
     private static String filePath = PropertyLoader.loadProperty("usms.service.publish.filepath");
-
 
     public static void main(String[] args) {
 //        if(StringUtils.isBlank(filePath)){
@@ -25,4 +25,6 @@ public class Main {
 
         System.out.println(PropertyLoader.loadProperty("usms.service.publish.systemDescription1"));
     }
+
+
 }

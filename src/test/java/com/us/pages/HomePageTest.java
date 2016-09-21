@@ -10,8 +10,6 @@ public class HomePageTest extends TestBase {
 
 	HomePage homepage;
 
-	LoginPage loginPage;
-
 	@Parameters({ "path" })
 //	@BeforeClass
 	public void testInit(@Optional("/") String path) {
@@ -31,13 +29,4 @@ public class HomePageTest extends TestBase {
 		Assert.assertTrue(true);
 	}
 
-	@Test
-	public void login(@Optional("/#/login") String path) throws InterruptedException {
-		webDriver.get(websiteUrl+path);
-		loginPage = PageFactory.initElements(webDriver, LoginPage.class);
-		System.out.println(loginPage.getUsername());
-		System.out.println(loginPage.getPassword());
-
-		Assert.assertTrue(true);
-	}
 }

@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -38,8 +39,8 @@ public class PublishServiceTest extends LoginPageTest{
     private String filePath = PropertyLoader.loadProperty("usms.service.publish.filepath");
 
     private void publishService(MsService msService) throws InterruptedException {
-        BrowserUtil.jumpAnotherPage(webDriver,websiteUrl+publishPath);
-        Thread.sleep(200);
+        webDriver.navigate().to(websiteUrl+publishPath);
+        Thread.sleep(2000);
         MsServicePage msServicePage = PageFactory.initElements(webDriver, MsServicePage.class);
 
         msServicePage.getServiceName().sendKeys(msService.getServiceName());
@@ -64,7 +65,7 @@ public class PublishServiceTest extends LoginPageTest{
         WebElement file = webDriver.findElement(new By.ByXPath("//input[@type='file']"));
         if(StringUtils.isBlank(filePath)){
             filePath = defaultFilePath;
-            filePath = PublishServiceTest.class.getResource(filePath).getFile();
+            filePath = new File(PublishServiceTest.class.getResource(filePath).getFile()).getAbsolutePath();
         }
         file.sendKeys(filePath);
 
@@ -88,10 +89,10 @@ public class PublishServiceTest extends LoginPageTest{
         }
     }
 
-    @Test
     public void auditService(MsService msService,boolean option,String auditText) throws InterruptedException {
-        BrowserUtil.jumpAnotherPage(webDriver,websiteUrl+auditPath);
-        Thread.sleep(200);
+        webDriver.navigate().to(websiteUrl+auditPath);
+        Thread.sleep(2000);
+
         List<WebElement> serviceNames = webDriver.findElements(By.xpath("//tr/td[2]"));
         List<WebElement> options = webDriver.findElements(By.xpath("//tr/td[8]/a"));
         for (int i = 0; i < serviceNames.size(); i++) {
@@ -100,7 +101,7 @@ public class PublishServiceTest extends LoginPageTest{
                 break;
             }
         }
-        Thread.sleep(200);
+        Thread.sleep(1000);
         WebElement text = webDriver.findElement(By.xpath("//textarea"));
         text.sendKeys(auditText);
         Thread.sleep(1000);
