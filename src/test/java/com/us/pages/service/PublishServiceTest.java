@@ -66,7 +66,6 @@ public class PublishServiceTest extends LoginPageTest{
             filePath = defaultFilePath;
             filePath = PublishServiceTest.class.getResource(filePath).getFile();
         }
-        System.out.println(filePath);
         file.sendKeys(filePath);
 
         Thread.sleep(1000);
