@@ -1,10 +1,7 @@
 package com.us;
 
-import com.us.runtest.HomePageTest;
 import com.us.runtest.service.PublishServiceTest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
