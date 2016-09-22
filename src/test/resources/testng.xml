@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Tests" verbose="5" data-provider-thread-count="1">
-	<test name="Test1">
-		<parameter name="path" value="/"/>
-		<classes>
-		    <class name="com.us.pages.HomePageTest"/>
-		</classes>
+	<test name="TestPublishService">
+		<!--<classes>-->
+			<!--<class name="com.us.pages.service.PublishServiceTest"/>-->
+		<!--</classes>-->
 	</test>
-	<test name="TestLogin">
-		<parameter name="path" value="/#/login"/>
-		<classes>
-			<class name="com.us.pages.LoginPageTest"/>
-		</classes>
-	</test>
-
-
 </suite>

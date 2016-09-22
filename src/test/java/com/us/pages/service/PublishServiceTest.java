@@ -1,15 +1,12 @@
 package com.us.pages.service;
 
 import com.us.model.MsService;
-import com.us.pages.HomePage;
 import com.us.pages.LoginPageTest;
 import com.us.pages.MsServicePage;
-import com.us.util.BrowserUtil;
 import com.us.util.PropertyLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -72,7 +69,7 @@ public class PublishServiceTest extends LoginPageTest{
         Thread.sleep(1000);
         WebElement upload = webDriver.findElement(new By.ByXPath("//button[@class='btn btn-success btn-xs']"));
         upload.click();
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         WebElement save = webDriver.findElement(new By.ByXPath("//input[@type='submit']"));
         save.click();
 
@@ -114,8 +111,8 @@ public class PublishServiceTest extends LoginPageTest{
             optionEle = webDriver.findElement(By.xpath("//input[@value='拒绝']"));
         }
         optionEle.click();
-        Thread.sleep(1000);
-        WebDriverWait wait = new WebDriverWait(webDriver, 2);
+        Thread.sleep(2000);
+        WebDriverWait wait = new WebDriverWait(webDriver, 3);
         wait.until(ExpectedConditions.alertIsPresent());
         Alert alert = webDriver.switchTo().alert();
         alert.accept();

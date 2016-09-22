@@ -1,7 +1,6 @@
 package com.us.pages.mytest;
 
 import com.us.pages.LoginPageTest;
-import com.us.util.BrowserUtil;
 import org.testng.annotations.Test;
 
 /**

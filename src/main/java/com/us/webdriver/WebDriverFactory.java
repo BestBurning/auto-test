@@ -1,5 +1,7 @@
 package com.us.webdriver;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -234,8 +236,17 @@ public class WebDriverFactory {
 	 */
 	private static void setChromeDriver() {
 		String os = System.getProperty("os.name").toLowerCase().substring(0, 3);
-		String chromeBinary = "src/main/resources/drivers/chrome/chromedriver"
+		String chromeBinary = new File(WebDriverFactory.class.getResource("/drivers/chrome/chromedriver").getFile()).getAbsolutePath()
 				+ (os.equals("win") ? ".exe" : "");
+		if (os.equals("win")){
+
+		}else {
+			try {
+				Runtime.getRuntime().exec( "chmod +x " + chromeBinary);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		System.setProperty("webdriver.chrome.driver", chromeBinary);
 	}
 
