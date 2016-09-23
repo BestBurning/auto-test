@@ -16,7 +16,7 @@ echo -e "Starting....."
 nohup java -classpath $CONF_DIR:$LIB_JARS com.us.Main > $STDOUT_FILE 2>&1 &
 
 PIDS=`ps -f | grep java | grep "$DEPLOY_DIR" | awk '{print $2}'`
-if [$PIDS == ""]; then
+if [ "$PIDS" == "" ]; then
     echo "ERROR!"
 	echo "Start IS ERROR!"
 else
