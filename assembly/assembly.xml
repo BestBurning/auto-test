@@ -3,7 +3,7 @@
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
     <id>assembly</id>
     <formats>
-        <format>tar.gz</format>
+        <format>tar</format>
     </formats>
     
     <fileSets>
@@ -12,7 +12,6 @@
             <outputDirectory>bin</outputDirectory>
             <directoryMode>0777</directoryMode>
             <fileMode>0777</fileMode>
-            <lineEnding>unix</lineEnding>
             <!--<includes>-->
                 <!--<include>*.sh</include>-->
             <!--</includes>-->
