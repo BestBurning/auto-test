@@ -1,14 +1,13 @@
 package com.us.runtest.service;
 
+import com.us.exception.PublishServiceException;
 import com.us.model.MsService;
 import com.us.pages.MsServicePage;
 import com.us.runtest.base.LoginPageTest;
 import com.us.util.ExcelReader;
 import com.us.util.PropertyLoader;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -23,11 +22,11 @@ import java.util.*;
  * @date 16/9/18
  */
 @Component
-public class PublishServiceTest extends LoginPageTest{
+public class PublishServiceTest extends LoginPageTest {
 
     private final String baseProperties = "usms.service.publish.";
 
-    private final String publishPath = "/#/main/add_service/0/"+System.currentTimeMillis()+"?isActive=0";
+    private final String publishPath = "/#/main/add_service/0/" + System.currentTimeMillis() + "?isActive=0";
 
     private final String auditPath = "/#/main/checking_service_list";
 
@@ -35,8 +34,8 @@ public class PublishServiceTest extends LoginPageTest{
 
     private String filePath = PropertyLoader.loadProperty("usms.service.publish.filepath");
 
-    private void publishService(MsService msService) throws InterruptedException {
-        webDriver.navigate().to(websiteUrl+publishPath);
+    private void publishService(MsService msService) throws InterruptedException, PublishServiceException {
+        webDriver.navigate().to(websiteUrl + publishPath);
         Thread.sleep(2000);
         MsServicePage msServicePage = PageFactory.initElements(webDriver, MsServicePage.class);
 
@@ -60,7 +59,7 @@ public class PublishServiceTest extends LoginPageTest{
         Thread.sleep(1000);
         //上传文件
         WebElement file = webDriver.findElement(new By.ByXPath("//input[@type='file']"));
-        if(StringUtils.isBlank(filePath)){
+        if (StringUtils.isBlank(filePath)) {
             filePath = defaultFilePath;
             filePath = new File(PublishServiceTest.class.getResource(filePath).getFile()).getAbsolutePath();
         }
@@ -72,28 +71,37 @@ public class PublishServiceTest extends LoginPageTest{
         Thread.sleep(3000);
         WebElement save = webDriver.findElement(new By.ByXPath("//input[@type='submit']"));
         save.click();
-
-        Thread.sleep(1000);
-        WebElement deleteMethod = webDriver.findElement(new By.ByXPath("(//a[@class='btn btn-default'])[2]"));
-        deleteMethod.click();
-        Thread.sleep(1000);
-        WebElement publish = webDriver.findElement(new By.ByXPath("//input[@type='submit' and @value='发布']"));
-        publish.click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        Thread.sleep(2000);
+        if (isAlertPresent(webDriver)) {
+            //存在重名
+            Alert alert = webDriver.switchTo().alert();
+            alert.accept();
+            throw new PublishServiceException("存在重名服务");
+        }else {
+            //继续
+            Thread.sleep(1000);
+            WebElement deleteMethod = webDriver.findElement(new By.ByXPath("(//a[@class='btn btn-default'])[2]"));
+            deleteMethod.click();
+            Thread.sleep(1000);
+            WebElement publish = webDriver.findElement(new By.ByXPath("//input[@type='submit' and @value='发布']"));
+            publish.click();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
-    public void auditService(MsService msService,boolean option,String auditText) throws InterruptedException {
-        webDriver.navigate().to(websiteUrl+auditPath);
+    public void auditService(MsService msService, boolean option, String auditText) throws InterruptedException {
+        webDriver.navigate().to(websiteUrl + auditPath);
         Thread.sleep(2000);
 
         List<WebElement> serviceNames = webDriver.findElements(By.xpath("//tr/td[2]"));
         List<WebElement> options = webDriver.findElements(By.xpath("//tr/td[8]/a"));
         for (int i = 0; i < serviceNames.size(); i++) {
-            if (serviceNames.get(i).getText().equals(msService.getServiceName())){
+            if (serviceNames.get(i).getText().equals(msService.getServiceName())) {
                 options.get(i).click();
                 break;
             }
@@ -103,10 +111,10 @@ public class PublishServiceTest extends LoginPageTest{
         text.sendKeys(auditText);
         Thread.sleep(1000);
         WebElement optionEle = null;
-        if (option){
+        if (option) {
             //同意
             optionEle = webDriver.findElement(By.xpath("//input[@value='同意']"));
-        }else {
+        } else {
             //拒绝
             optionEle = webDriver.findElement(By.xpath("//input[@value='拒绝']"));
         }
@@ -128,21 +136,35 @@ public class PublishServiceTest extends LoginPageTest{
 
             MsService msService = new MsService();
 
-            msService.setServiceName(map.getOrDefault("serviceName","serviceName"));
-            msService.setUrl(map.getOrDefault("url","url"));
-            msService.setServiceInterface(map.getOrDefault("serviceInterface","serviceInterface"));
-            msService.setSystemName(map.getOrDefault("systemName","systemName"));
-            msService.setSystemEgName(map.getOrDefault("systemEgName","systemEgName"));
-            msService.setSystemDescription(map.getOrDefault("systemDescription","systemDescription"));
-            msService.setOwner(map.getOrDefault("owner","owner"));
-            msService.setPhone(map.getOrDefault("phone","1111111111"));
-            msService.setEmail(map.getOrDefault("email","email@email.com"));
+            msService.setServiceName(map.getOrDefault("serviceName", "serviceName"));
+            msService.setUrl(map.getOrDefault("url", "url"));
+            msService.setServiceInterface(map.getOrDefault("serviceInterface", "serviceInterface"));
+            msService.setSystemName(map.getOrDefault("systemName", "systemName"));
+            msService.setSystemEgName(map.getOrDefault("systemEgName", "systemEgName"));
+            msService.setSystemDescription(map.getOrDefault("systemDescription", "systemDescription"));
+            msService.setOwner(map.getOrDefault("owner", "owner"));
+            msService.setPhone(map.getOrDefault("phone", "1111111111"));
+            msService.setEmail(map.getOrDefault("email", "email@email.com"));
 
-            publishService(msService);
-            auditService(msService,true,"同意");
+            try {
+                publishService(msService);
+                auditService(msService, true, "同意");
+            } catch (PublishServiceException e) {
+                e.printStackTrace();
+            }
+
 
             System.out.println("............");
         }
     }
 
+    public boolean isAlertPresent(WebDriver driver) {
+        try {
+            driver.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException Ex) {
+            return false;
+        }
+
+    }
 }
