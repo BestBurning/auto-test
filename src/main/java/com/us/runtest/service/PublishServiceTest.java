@@ -3,6 +3,7 @@ package com.us.runtest.service;
 import com.us.model.MsService;
 import com.us.pages.MsServicePage;
 import com.us.runtest.base.LoginPageTest;
+import com.us.util.ExcelReader;
 import com.us.util.PropertyLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
@@ -15,9 +16,7 @@ import org.springframework.stereotype.Component;
 import org.testng.Assert;
 
 import java.io.File;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Bruce
@@ -121,27 +120,29 @@ public class PublishServiceTest extends LoginPageTest{
     }
 
     public void publishServices() throws InterruptedException {
-        Properties props = PropertyLoader.getProperties();
-        Set<Object> keys = props.keySet();
-        int num = 1;
-        while (keys.contains(baseProperties+"serviceName"+num)){
+        String file = new File(this.getClass().getResource("/publishServices.xlsx").getFile()).getAbsolutePath();
+        List<Map<String, String>> list = ExcelReader.readExcelContent(file);
+        Map<String, String> map = null;
+        for (int i = 0; i < list.size(); i++) {
+            map = list.get(i);
+
             MsService msService = new MsService();
 
-            msService.setServiceName(PropertyLoader.loadProperty(baseProperties+"serviceName"+num,"serviceName"));
-            msService.setUrl(PropertyLoader.loadProperty(baseProperties+"url"+num,"url"));
-            msService.setServiceInterface(PropertyLoader.loadProperty(baseProperties+"serviceInterface"+num,"serviceInterface"));
-            msService.setSystemName(PropertyLoader.loadProperty(baseProperties+"systemName"+num,"systemName"));
-            msService.setSystemEgName(PropertyLoader.loadProperty(baseProperties+"systemEgName"+num,"systemEgName"));
-            msService.setSystemDescription(PropertyLoader.loadProperty(baseProperties+"systemDescription"+num,"systemDescription"));
-            msService.setOwner(PropertyLoader.loadProperty(baseProperties+"owner"+num,"owner"));
-            msService.setPhone(PropertyLoader.loadProperty(baseProperties+"phone"+num,"1111111111"));
-            msService.setEmail(PropertyLoader.loadProperty(baseProperties+"email"+num,"email@email.com"));
+            msService.setServiceName(map.getOrDefault("serviceName","serviceName"));
+            msService.setUrl(map.getOrDefault("url","url"));
+            msService.setServiceInterface(map.getOrDefault("serviceInterface","serviceInterface"));
+            msService.setSystemName(map.getOrDefault("systemName","systemName"));
+            msService.setSystemEgName(map.getOrDefault("systemEgName","systemEgName"));
+            msService.setSystemDescription(map.getOrDefault("systemDescription","systemDescription"));
+            msService.setOwner(map.getOrDefault("owner","owner"));
+            msService.setPhone(map.getOrDefault("phone","1111111111"));
+            msService.setEmail(map.getOrDefault("email","email@email.com"));
 
             publishService(msService);
             auditService(msService,true,"同意");
-            num++;
+
+            System.out.println("............");
         }
-        Assert.assertTrue(true);
     }
 
 }
