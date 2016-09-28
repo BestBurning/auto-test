@@ -30,7 +30,7 @@ public class PublishServiceTest extends LoginPageTest {
 
     private final String auditPath = "/#/main/checking_service_list";
 
-    private final String defaultFilePath = "/file.jpg";
+    private final String defaultFilePath = "/cmb-demo-api-1.0.jar";
 
     private String filePath = PropertyLoader.loadProperty("usms.service.publish.filepath");
 
