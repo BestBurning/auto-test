@@ -17,7 +17,7 @@
             <!--</includes>-->
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/main/resources</directory>
+            <directory>${project.basedir}/src/main/resources,${project.basedir}/conf</directory>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
     </fileSets>
