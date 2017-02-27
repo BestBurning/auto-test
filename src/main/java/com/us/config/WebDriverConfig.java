@@ -6,6 +6,7 @@ import com.us.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class WebDriverConfig {
 
     @Bean
+    @Scope("prototype")
     public WebDriver getWebDriver(){
         String websiteUrl = PropertyLoader.loadProperty("site.url");
         String gridHubUrl = PropertyLoader.loadProperty("grid2.hub");
